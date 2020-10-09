@@ -25,6 +25,7 @@
 #--------------------------------------------------------------------------
 source "https://rubygems.org" do
   gem "azure-core",          "~> 0.1.13", :require => false
+  gem "net-http-persistent", "~> 4.0", :require => false
   gem "nokogiri",            "~> 1.6", ">= 1.6.8", :require => false
 
   gem "dotenv",              "~> 2.0", :require => false
