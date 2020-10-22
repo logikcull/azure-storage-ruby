@@ -30,10 +30,14 @@ module Azure::Storage::Common::Core
     # @param uri  [URI|String] the base uri (scheme, host, port) of the http endpoint
     # @return [Net::HTTP] http agent for a given uri
     def agents(uri)
-      key = uri.to_s
+      uri = URI(uri) unless uri.is_a? URI
+      key = uri.host
+
       @agents ||= {}
       unless @agents.key?(key)
         @agents[key] = build_http(uri)
+      else
+        reuse_agent!(@agents[key])
       end
       @agents[key]
     end
@@ -44,6 +48,12 @@ module Azure::Storage::Common::Core
     end
 
     private
+
+      # Empties all information that cannot be reused.
+      def reuse_agent!(agent)
+        agent.params.clear
+        agent.headers.clear
+      end
 
       def build_http(uri)
         ssl_options = {}
